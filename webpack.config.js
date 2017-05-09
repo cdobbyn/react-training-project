@@ -1,12 +1,13 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: [
         './src/index.js',
-        './style/style.scss'
+        './assets/style/base.scss'
     ],
     output: {
-        path: __dirname,
+        path: __dirname.concat('/dist/'),
         publicPath: '/',
         filename: 'bundle.js'
     },
@@ -27,27 +28,28 @@ module.exports = {
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [
-                        // {
-                        //     loader: "style-loader"
-                        // },
                         {
-                            loader: "css-loader"
+                            loader: 'css-loader',
+                            options: {
+                                // minimize: true,
+                                importLoaders: 1
+                            }
                         },
                         {
-                            loader: "postcss-loader",
+                            loader: 'postcss-loader',
                             options: {
                                 plugins: () => {
                                     return [
                                         require('autoprefixer')({
-                                            browsers: 'last 5 versions'
+                                            browsers: [
+                                                "> 2%"
+                                            ]
                                         })
                                     ]
                                 }
                             }
                         },
-                        {
-                            loader: "sass-loader"
-                        }
+                        { loader: "sass-loader" }
                     ]
                 })
             }
@@ -61,7 +63,16 @@ module.exports = {
         contentBase: './dist/'
     },
     plugins: [
-        new ExtractTextPlugin('styles.css'),
+        new ExtractTextPlugin('bundle.css'),
+        new HtmlWebpackPlugin({
+            template: './assets/templates/index.ejs',
+            minify: {
+                collapseInlineTagWhitespace: true,
+                collapseWhitespace: true,
+                html5: true,
+                removeComments: true,
+            }
+        }),
     ]
 };
 
