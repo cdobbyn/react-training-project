@@ -2,26 +2,20 @@ import React, {Component} from 'react';
 import {Field,reduxForm} from 'redux-form';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
+import { Button, FormControl, FormGroup, HelpBlock, ControlLabel } from 'react-bootstrap';
 import {createPost} from '../actions';
 
 
 class PostsNew extends Component {
     renderField(field) {
         const { meta: {touched, error} } = field;
-        const className = `form-group ${touched && error ? 'has-danger' : ''}`;
 
         return (
-            <div className={className}>
-                <label>{field.label}</label>
-                <input
-                    className="form-control"
-                    type="text"
-                    {...field.input}
-                />
-                <div className="text-help">
-                    {touched ? error : ''}
-                </div>
-            </div>
+            <FormGroup validationState={touched && error ? 'error': null}>
+                <ControlLabel>{field.label}</ControlLabel>
+                <FormControl type="text" {...field.input} placeholder="poops"/>
+                <HelpBlock>{touched ? error : ''}</HelpBlock>
+            </FormGroup>
         );
     }
 
@@ -51,8 +45,10 @@ class PostsNew extends Component {
                     name="content"
                     component={this.renderField}
                 />
-                <button type="submit" className="btn btn-primary">Submit</button>
-                <Link className="btn btn-danger" to="/">Cancel</Link>
+                <Button type="submit" bsStyle="primary">Submit</Button>
+                <Link to="/">
+                    <Button bsStyle="danger">Cancel</Button>
+                </Link>
             </form>
         );
     }

@@ -60,7 +60,7 @@ module.exports = {
     },
     devServer: {
         historyApiFallback: true,
-        contentBase: './dist/'
+        contentBase: './dist/',
     },
     plugins: [
         new ExtractTextPlugin('bundle.css'),
